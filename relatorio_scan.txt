@@ -1,0 +1,7 @@
+Relatório de Escaneamento de Portas - IP: https://scanme.nmap.org/
+Data: 2025-03-24 01:26:09
+==================================================
+Porta 80 está fechada.
+Porta 20 está fechada.
+==================================================
+Escaneamento finalizado.
