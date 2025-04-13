@@ -13,19 +13,19 @@ git clone https://github.com/brazbruna/scanner-de-portas.git
 
 ## Como Usar
 
-1. **Clone este repositório**:
+1. Clone este repositório:
 
 ```bash
 git clone https://github.com/brazbruna/scanner-de-portas.git
 
-2. **Instale as dependências**:
+2. Instale as dependências:
 
 pip install colorama
 
-3. **Execute o script**:
+3. Execute o script:
 python scanner.py
 
-### 3. **Exemplo de Saída**:
+### 3. Exemplo de Saída:
 
 Digite o IP ou domínio para escanear: localhost
 Digite as portas a serem escaneadas (separadas por vírgula): 80 , 20, 55
