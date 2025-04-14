@@ -1,11 +1,10 @@
 import socket
 from datetime import datetime
 from colorama import Fore, init
+import nmap  # Para scans mais avançados como sistemas operacionais
 
 # Inicializa o colorama
 init(autoreset=True)
-
-print(Fore.RED + "Não utilize este scanner para escanear IPs sem autorização do responsável.")
 
 # Dicionário de portas relevantes com descrição e vulnerabilidade (se houver)
 portas_relevantes = {
@@ -32,7 +31,6 @@ def scan_port(ip, port):
         s.close()  # Fecha a conexão após o teste
         
         if result == 0:  # Se a porta estiver aberta
-            # Adicionar informações sobre a porta, se disponível
             if port in portas_relevantes:
                 servico = portas_relevantes[port]["serviço"]
                 vulnerabilidade = portas_relevantes[port]["vulnerabilidade"]
@@ -46,9 +44,40 @@ def scan_port(ip, port):
         print(f"Erro ao escanear {port}: {e}")
         return False
 
+# Função para escanear o sistema operacional (Usando nmap)
+def scan_os(ip):
+    """Escaneia o sistema operacional de um IP alvo"""
+    nm = nmap.PortScanner()
+    try:
+        nm.scan(ip, arguments="-O")  # O parâmetro '-O' ativa a detecção de sistema operacional
+        os_info = nm[ip]['osmatch'] if 'osmatch' in nm[ip] else "Não detectado"
+        print(Fore.BLUE + f"Sistema Operacional detectado: {os_info}")
+        return os_info
+    except Exception as e:
+        print(f"Erro ao escanear o sistema operacional: {e}")
+        return None
+
+# Função para escanear versões de serviço (Usando nmap)
+def scan_versions(ip):
+    """Escaneia versões de serviço de um IP alvo"""
+    nm = nmap.PortScanner()
+    try:
+        nm.scan(ip, arguments="-sV")  # O parâmetro '-sV' escaneia as versões dos serviços
+        for host in nm.all_hosts():
+            for proto in nm[host].all_protocols():
+                lport = nm[host][proto].keys()
+                for port in lport:
+                    service = nm[host][proto][port]["name"]
+                    version = nm[host][proto][port]["version"]
+                    print(Fore.CYAN + f"Porta {port}: Serviço: {service}, Versão: {version}")
+        return True
+    except Exception as e:
+        print(f"Erro ao escanear versões de serviço: {e}")
+        return False
+
 # Função para salvar os resultados em um arquivo
 def save_results_to_file(ip, portas, resultados):
-    with open("relatorio_scan.txt", "w", encoding="utf-8") as file:
+    with open("relatorio_scan.txt", "w") as file:
         file.write(f"Relatório de Escaneamento de Portas - IP: {ip}\n")
         file.write(f"Data: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
         file.write("="*50 + "\n")
@@ -56,7 +85,6 @@ def save_results_to_file(ip, portas, resultados):
         for port, status in resultados.items():
             if status:  # Se a porta está aberta
                 file.write(f"Porta {port} está aberta.\n")
-                # Adicionar descrição sobre a porta, se disponível
                 if port in portas_relevantes:
                     servico = portas_relevantes[port]["serviço"]
                     vulnerabilidade = portas_relevantes[port]["vulnerabilidade"]
@@ -87,9 +115,25 @@ def scanner_de_portas(ip, portas):
     save_results_to_file(ip, portas, resultados)
     print(Fore.GREEN + "Relatório salvo com sucesso em 'relatorio_scan.txt'")
 
+# Função para escolher o tipo de scan
+def escolher_scan(ip):
+    print("Escolha o tipo de scan:")
+    print("1 - Escanear portas")
+    print("2 - Escanear sistema operacional")
+    print("3 - Escanear versões de serviço")
+    escolha = input("Digite o número da opção desejada: ")
+
+    if escolha == '1':
+        portas = list(map(int, input("Digite as portas a serem escaneadas (separadas por vírgula): ").split(",")))
+        scanner_de_portas(ip, portas)
+    elif escolha == '2':
+        scan_os(ip)
+    elif escolha == '3':
+        scan_versions(ip)
+    else:
+        print(Fore.RED + "Opção inválida!")
+
 # Exemplo de uso
 if __name__ == "__main__":
     ip_alvo = input("Digite o IP ou domínio para escanear: ")
-    portas = list(map(int, input("Digite as portas a serem escaneadas (separadas por vírgula): ").split(",")))
-    
-    scanner_de_portas(ip_alvo, portas)
+    escolher_scan(ip_alvo)
