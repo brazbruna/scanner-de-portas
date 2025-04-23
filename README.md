@@ -1,15 +1,19 @@
-# Scanner de Portas em Python
+## Scanner de Portas em Python
 
 Este projeto é um **Scanner de Portas** simples em Python, que possibilita a identificação de portas abertas em um endereço IP e gera um relatório com o status das portas. O relatório inclui informações adicionais sobre as portas mais relevantes e as vulnerabilidades associadas a elas, proporcionando uma visão sobre a segurança de sistemas e redes.
 
+## 🛠 Funcionalidades
 
-## Como Usar
+- Entrada de endereço IP ou hostname.
+- Verificação de portas entre 1 e 1024 (padrão).
+- Exibição de portas abertas.
+- Tratamento de exceções (ex: host inválido ou inacessível).
 
-1. **Clone este repositório**:
+##  Tecnologias
 
-```bash
-git clone https://github.com/brazbruna/scanner-de-portas.git
-
+- Python 3.x
+- Módulo `socket`
+- Módulo `datetime`
 
 ## Como Usar
 
@@ -17,15 +21,20 @@ git clone https://github.com/brazbruna/scanner-de-portas.git
 
 ```bash
 git clone https://github.com/brazbruna/scanner-de-portas.git
+cd scanner-de-portas
 
 2. Instale as dependências:
 
 pip install colorama
 
-3. Execute o script:
+## 3. Execute o script:
+
+bash
+Copiar
+Editar
 python scanner.py
 
-### 3. Exemplo de Saída:
+### 4. Exemplo de Saída:
 
 Digite o IP ou domínio para escanear: localhost
 Digite as portas a serem escaneadas (separadas por vírgula): 80 , 20, 55
