@@ -17,13 +17,8 @@ Este projeto é um **Scanner de Portas** simples em Python, que possibilita a id
 
 ## Como Usar
 
-**1. Clone este repositório:**
 
-```bash
-git clone https://github.com/brazbruna/scanner-de-portas.git
-cd scanner-de-portas
-
-**2. Instale as dependências:**
+**1. Instale as dependências:**
 
 pip install colorama
 
